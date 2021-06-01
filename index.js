@@ -29,6 +29,17 @@ const FRAMEWORKS = [
       },
     ],
   },
+  {
+    name: "fastify",
+    color: magenta,
+    variants: [
+      {
+        name: "fastify-mysql-standard",
+        display: "Standard REST service with Fastify and MySQL driver",
+        color: magenta,
+      },
+    ],
+  },
 ];
 
 const TEMPLATES = FRAMEWORKS.map(
