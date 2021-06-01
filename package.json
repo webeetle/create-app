@@ -17,13 +17,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vitejs/vite.git",
-    "directory": "packages/create-app"
+    "url": "git+https://github.com/webeetle/create-app.git"
   },
   "bugs": {
-    "url": "https://github.com/vitejs/vite/issues"
+    "url": "https://github.com/webeetle/create-app/issues"
   },
-  "homepage": "https://github.com/vitejs/vite/tree/main/packages/create-app#readme",
+  "homepage": "https://github.com/webeetle/create-app",
   "dependencies": {
     "kolorist": "^1.2.9",
     "minimist": "^1.2.5",
