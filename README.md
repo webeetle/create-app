@@ -8,11 +8,11 @@ Scaffolding for WeBeetle Projects
 With NPM:
 
 ```bash
-$ npm init @webeetle/app
+npm init @webeetle/app
 ```
 
 With Yarn:
 
 ```bash
-$ yarn create @webeetle/app
+yarn create @webeetle/app
 ```
