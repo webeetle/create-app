@@ -5,6 +5,8 @@ const path = require("path");
 const argv = require("minimist")(process.argv.slice(2));
 // eslint-disable-next-line node/no-restricted-require
 const prompts = require("prompts");
+const { exec } = require("child_process");
+
 const {
   yellow,
   green,
@@ -27,11 +29,13 @@ const FRAMEWORKS = [
         name: "react-vite-tailwind",
         display: "React SPA with Vite & Tailwind",
         color: cyan,
+        cmd: [],
       },
       {
         name: "react-admin-vite-tailwind",
         display: "React Admin Panel with MobX, Vite & Tailwind",
         color: cyan,
+        cmd: [],
       },
     ],
   },
@@ -43,6 +47,12 @@ const FRAMEWORKS = [
         name: "fastify-mysql-rest",
         display: "REST service in Fastify + MySQL",
         color: magenta,
+        cmd: [
+          {
+            action: `Prepare ${cyan(".env")} file...`,
+            cmd: "mv .env.example .env",
+          },
+        ],
       },
     ],
   },
@@ -51,6 +61,11 @@ const FRAMEWORKS = [
 const TEMPLATES = FRAMEWORKS.map(
   (f) => (f.variants && f.variants.map((v) => v.name)) || [f.name]
 ).reduce((a, b) => a.concat(b), []);
+
+let TEMPLATES_OBJ = [];
+FRAMEWORKS.forEach((f) =>
+  f.variants.forEach((v) => (TEMPLATES_OBJ = [...TEMPLATES_OBJ, v]))
+);
 
 const renameFiles = {
   _gitignore: ".gitignore",
@@ -152,8 +167,9 @@ async function init() {
 
   // determine template
   template = variant || framework || template;
+  const objTemplate = TEMPLATES_OBJ.find((x) => x.name === template);
 
-  console.log(`\nScaffolding project in ${root}...`);
+  console.log(`\n> Scaffolding project in ${cyan(root)}`);
 
   const templateDir = path.join(__dirname, `template-${template}`);
 
@@ -182,15 +198,23 @@ async function init() {
       : toValidPackageName(targetDir);
     write("package.json", JSON.stringify(pkg, null, 2));
   }
+  console.log(`${green("✔ Done!")}\n`);
 
   // const pkgManager = /yarn/.test(process.env.npm_execpath) ? "yarn" : "npm";
+  // const thisDir = process.cwd();
+  process.chdir(`${path.relative(cwd, root)}`);
+  for (const cmd of objTemplate.cmd) {
+    console.log(`> ${cmd.action}`);
+    const res = await execShellCommand(cmd.cmd);
+    console.log(`${green("✔ Done!")}\n`);
+  }
 
-  console.log(`\nDone! Now run:\n`);
+  console.log(`\n${green("✔ ALL DONE!")} Now run:\n`);
   if (root !== cwd) {
-    console.log(`  cd ${path.relative(cwd, root)}`);
+    console.log(`  ${yellow(`cd ${path.relative(cwd, root)}`)}`);
   }
   console.log();
-  console.log("and read the README.md file!");
+  console.log(`and read the ${cyan("README.md")} file!`);
   console.log();
 }
 
@@ -245,6 +269,18 @@ function emptyDir(dir) {
       fs.unlinkSync(abs);
     }
   }
+}
+
+function execShellCommand(cmd) {
+  const exec = require("child_process").exec;
+  return new Promise((resolve, reject) => {
+    exec(cmd, (error, stdout, stderr) => {
+      if (error) {
+        console.warn(error);
+      }
+      resolve(stdout ? stdout : stderr);
+    });
+  });
 }
 
 init().catch((e) => {
