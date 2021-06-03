@@ -13,6 +13,7 @@ const {
   magenta,
   lightRed,
   red,
+  white,
 } = require("kolorist");
 
 const cwd = process.cwd();
@@ -24,7 +25,12 @@ const FRAMEWORKS = [
     variants: [
       {
         name: "react-vite-tailwind",
-        display: "React with Vite & Tailwind",
+        display: "React SPA with Vite & Tailwind",
+        color: cyan,
+      },
+      {
+        name: "react-admin-vite-tailwind",
+        display: "React Admin Panel with MobX, Vite & Tailwind",
         color: cyan,
       },
     ],
@@ -34,8 +40,8 @@ const FRAMEWORKS = [
     color: magenta,
     variants: [
       {
-        name: "fastify-mysql-standard",
-        display: "Standard REST service with Fastify and MySQL driver",
+        name: "fastify-mysql-rest",
+        display: "REST service in Fastify + MySQL",
         color: magenta,
       },
     ],
@@ -114,7 +120,9 @@ async function init() {
             framework.variants.map((variant) => {
               const variantColor = variant.color;
               return {
-                title: variantColor(variant.name),
+                title: `${variantColor(variant.name)} - ${white(
+                  variant.display
+                )}`,
                 value: variant.name,
               };
             }),

@@ -1,0 +1,9 @@
+.main {
+  @apply flex items-center mt-20;
+}
+.title {
+  @apply text-6xl font-bold text-indigo-500;
+}
+.subtitle {
+  @apply mt-5 text-xl font-light text-gray-500;
+}
